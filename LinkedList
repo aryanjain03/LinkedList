@@ -1,0 +1,124 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+// remaining functions : insertAtIndex, deleteAtIndex
+template <class T>
+class ListNode{
+    public:
+        ListNode *next;
+        T val;
+        ListNode(){
+            val = 0;
+            next = NULL;
+        }
+        ListNode(int val){
+            this->val = val;
+            next = NULL;
+        }
+        ListNode(T val, ListNode *next){
+            this->val = val;
+            this->next = next;
+        }
+        ListNode *insertAtBeginning(T val){ 
+            ListNode *n = new ListNode(val);
+            n->next = this;
+            return n;
+        }
+        void insertAtEnd(T val){
+            ListNode *h = this, *n = new ListNode(val);
+            if(this == NULL) h = n;
+            while(h->next) h = h->next;
+            h->next = n;
+        }
+        // ListNode *insertAtIndex(int val, int ind){ // 0 based indexing
+        //     ListNode *h = this, *n = new ListNode(val);
+        //     if(ind == 0) return insertAtBeginning(val);
+        //     for(int i = 0; i < ind-1; i++)  h = h->next;
+        //     ListNode *tmp = h->next;
+        //     h->next = n;
+        //     n->next = tmp;
+        //     return this;
+        // }
+        ListNode *insertAfterNode(ListNode *n, T val){
+            ListNode *h = this;
+            while(h != n && h != NULL) h = h->next;
+            if(h == NULL){
+                cout << "Node doesn't exist !" << endl;
+                return this;
+            }
+            ListNode *tmp = h->next;
+            h->next = new ListNode(val);
+            h->next->next = tmp;
+            return this;
+        }
+        ListNode *insertAtIndex(T val, int ind){ // 0 based indexing
+            ListNode *h = this;
+            if(ind == 0) return insertAtBeginning(val);
+            for(int i = 0; i < ind-1; i++)  h = h->next;
+            ListNode *tmp = new ListNode(val);
+            tmp->next = h->next;
+            h->next = tmp;
+            return this;
+        }
+        ListNode *deleteAtBeginning(){ 
+            if(this == NULL) return NULL;
+            ListNode *tmp = this->next;
+            delete this;
+            return tmp;
+        }
+        void deleteAtEnd(){ 
+            if(this == NULL) return;
+            ListNode *p = this, *q = p->next;
+            while(q->next){
+                p = p->next;
+                q = q->next;
+            }
+            p->next = NULL;
+            delete q;
+        }
+        void printList(){ // head->printList(); 
+            ListNode *tmp = this;
+            while(tmp){
+                cout << tmp->val << ' ';
+                tmp = tmp->next;
+            }
+        }
+        static ListNode *arrayToLinkedList(T *arr, int size){ 
+            if(arr == NULL || size == 0) return NULL;
+            ListNode *h = new ListNode(arr[0]);
+            ListNode *head = h;
+            for(int i = 1; i < size; i++){
+                h->next = new ListNode(arr[i]);
+                h = h->next;
+            }
+            return head;
+        }
+        static ListNode *vectorToLinkedList(vector<T>& v){ 
+            int i = 0;
+            ListNode *head = new ListNode(v[i++]), *h = head;
+            while(i < v.size()){
+                head->next = new ListNode(v[i++]);
+                head = head->next;
+            }
+            head->next = NULL;
+            return h;
+        }
+        static ListNode *mergeLinkedLists(ListNode *l1, ListNode *l2){
+            if(l1 == NULL) return l1;
+            ListNode *tmp = l1;
+            while(l1->next) l1 = l1->next;
+            l1->next = l2;
+            return tmp;
+        }
+        void reverse(){
+            ListNode *curr = this, *prev = NULL, *next = new ListNode();
+            while(curr != NULL){
+                next = curr->next;
+                curr->next = prev;
+                prev = curr;
+                curr = next;
+            }
+            ListNode *h = this;
+            h = prev;
+        }
+};
