@@ -1,2 +1,2 @@
 # test_repository
-This is my first repository!
+This is a template for a linked list in c++
